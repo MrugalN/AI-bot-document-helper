@@ -11,7 +11,10 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 
 def ingest_docs():
-    loader = ReadTheDocsLoader("langchain-docs/langchain.readthedocs.io/en/v0.1")
+    loader = ReadTheDocsLoader(
+        r"C:\Users\mruga\Projects\AI-Doc-bot\documentation-helper\langchain-docs\langchain-docs\api.python.langchain.com\en\latest",
+        encoding="utf-8",
+    )
 
     raw_documents = loader.load()
     print(f"loaded {len(raw_documents)} documents")
@@ -22,10 +25,11 @@ def ingest_docs():
         new_url = doc.metadata["source"]
         new_url = new_url.replace("langchain-docs", "https:/")
         doc.metadata.update({"source": new_url})
+        print(new_url)
 
     print(f"Going to add {len(documents)} to Pinecone")
     PineconeVectorStore.from_documents(
-        documents, embeddings, index_name="langchain-doc-index"
+        documents, embeddings, index_name="langchain-dox-index"
     )
     print("****Loading to vectorstore done ***")
 
